@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Nodes.ViewModels"
+        xmlns:view="using:Nodes.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Nodes.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Nodes"
+        xmlns:control="using:Nodes.Views"
+		>
+
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+			<ResourceInclude Source="/Assets/ResourceDictionary1.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+	<Grid RowDefinitions="40,*">
+		<StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+			<Button Content="Add Node" Command="{Binding #graphEditor.AddNode}"/>
+			<Button Content="Remove Node" Command="{Binding #graphEditor.RemoveNode}">
+			</Button>
+			<Button Content="Connect Nodes" Command="{Binding #graphEditor.ConnectNodes}"/>
+			<Button Content="Disconnect Nodes" Command="{Binding #graphEditor.DisconnectNodes}"/>
+			<!--
+			<Button Content="Open File" Command="{Binding OpenFile}"/>
+			<Button Content="Save File" Command="{Binding SaveFile}"/>
+			-->
+		</StackPanel>
+	<view:GraphEditorView Graph="{Binding Graph}"
+						  Grid.Row="1"
+						  x:Name="graphEditor"/>
+	</Grid>
+</Window>
