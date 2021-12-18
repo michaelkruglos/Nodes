@@ -23,7 +23,8 @@ namespace Nodes.Views
         private const double DefaultArrowLength = 10;
         public static DirectProperty<GraphEditorView, Graph> GraphProperty =
             AvaloniaProperty.RegisterDirect<GraphEditorView, Graph>(nameof(Graph),
-                g => g.Graph, (g,v)=> g.Graph = v);
+                g => g.Graph,
+                (g, v) => g.Graph = v);
         
         private Graph _graph = new();
         private IDictionary<Node, NodeView> _nodesToViews = new Dictionary<Node, NodeView>();

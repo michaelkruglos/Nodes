@@ -41,8 +41,6 @@ namespace Nodes.ViewModels
             }
         }
 
-        public ICommand EditNameCommand { get; set; }
-
         private Point _position;
         public Point Position
         {
@@ -58,19 +56,13 @@ namespace Nodes.ViewModels
         {
             _node = new Node("Test Node");
             _name = _node.Name;
-            EditNameCommand = ReactiveCommand.Create(EditName);
         }
 
         public NodeViewModel(Node n)
         {
             _node = n;
             _name = _node.Name;
-            EditNameCommand = ReactiveCommand.Create(EditName);
         }
 
-        private void EditName()
-        {
-            //throw new NotImplementedException();
-        }
     }
 }
