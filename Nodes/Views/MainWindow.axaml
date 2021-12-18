@@ -29,10 +29,8 @@
 			</Button>
 			<Button Content="Connect Nodes" Command="{Binding #graphEditor.ConnectNodes}"/>
 			<Button Content="Disconnect Nodes" Command="{Binding #graphEditor.DisconnectNodes}"/>
-			<!--
-			<Button Content="Open File" Command="{Binding OpenFile}"/>
-			<Button Content="Save File" Command="{Binding SaveFile}"/>
-			-->
+			<Button Content="Open File" Command="{Binding OpenFileCommand}"/>
+			<Button Content="Save File" Command="{Binding SaveFileCommand}"/>
 		</StackPanel>
 	<view:GraphEditorView Graph="{Binding Graph}"
 						  Grid.Row="1"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Nodes.Models
 {
@@ -13,7 +14,9 @@ namespace Nodes.Models
 
         }
 
+        [JsonRequired]
         public ISet<Edge> Edges { get; set; } = new HashSet<Edge>();
+        [JsonRequired]
         public ISet<Node> Nodes { get; set; } = new HashSet<Node>();
 
         public void AddNode(Node node)

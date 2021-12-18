@@ -199,7 +199,7 @@ namespace Nodes.Views
             }
         }
 
-        private static void SetupAttachmentPointsTracking(EdgeView? edgeCtrl, NodeView from, NodeView to)
+        private static void SetupAttachmentPointsTracking(EdgeView edgeCtrl, NodeView from, NodeView to)
         {
             from.GetObservable(BoundsProperty).Subscribe(x => UpdateEdgeAttachmentPoints(edgeCtrl, from, to));
             to.GetObservable(BoundsProperty).Subscribe(x => UpdateEdgeAttachmentPoints(edgeCtrl, from, to));

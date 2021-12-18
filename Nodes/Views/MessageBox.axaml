@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="600" Height="350"
+        CornerRadius="5"
+        WindowStartupLocation="CenterOwner"
+        x:Class="Nodes.Views.MessageBox"
+        >
+	<DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}"
+				   HorizontalAlignment="Center"
+				   VerticalAlignment="Center"
+                   Margin="20"
+				   />
+        <Button DockPanel.Dock="Bottom" Content="    OK    " Command="{Binding Close}"
+				   HorizontalAlignment="Center"
+				   VerticalAlignment="Bottom"
+                   Margin="20"
+				/>
+	</DockPanel>
+</Window>

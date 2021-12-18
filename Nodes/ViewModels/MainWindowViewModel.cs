@@ -1,10 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Nodes.Models;
+using Nodes.Services;
+using Nodes.Utils;
 using ReactiveUI;
 
 namespace Nodes.ViewModels
@@ -13,15 +21,39 @@ namespace Nodes.ViewModels
     {
 
         private Graph _graph;
+        public readonly Interaction<Unit, string?> ShowFileOpenDialog;
+        public readonly Interaction<Unit, string?> ShowFileSaveDialog;
+        private readonly IMessageBoxService _msgbox;
 
-        public MainWindowViewModel()
+        public ICommand OpenFileCommand { get; }
+        public ICommand SaveFileCommand { get; }
+
+        public MainWindowViewModel(IMessageBoxService msgbox)
         {
-            // For testing
-            var graph = new Graph();
-            var node1 = new Models.Node("Some cool node") { Position = new Point(10, 10) };
-            var node2 = new Models.Node("Some other cool node") { Position = new Point(300, 30) };
-            graph.AddEdge(new Edge(node1, node2));
-            _graph = graph;
+            _msgbox = msgbox;
+            _graph = new Graph();
+            ShowFileOpenDialog = new Interaction<Unit, string?>();
+            ShowFileSaveDialog = new Interaction<Unit, string?>();
+            OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var fileName = await ShowFileOpenDialog.Handle(Unit.Default);
+                if (fileName != null)
+                {
+                    var g = await LoadGraphFromJsonFile(fileName);
+                    if (g != null)
+                    {
+                        Graph = g;
+                    }
+                }
+            });
+            SaveFileCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var fileName = await ShowFileSaveDialog.Handle(Unit.Default);
+                if (fileName != null)
+                {
+                    await SaveGraphToJsonFile(fileName);
+                }
+            });
         }
 
         public Graph Graph 
@@ -30,6 +62,41 @@ namespace Nodes.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _graph, value);
+            }
+        }
+
+        private async Task<Graph?> LoadGraphFromJsonFile(string fileName)
+        {
+            try
+            {
+                using var file = File.OpenRead(fileName);
+                using var stream = new StreamReader(file);
+                using var jsonReader = new JsonTextReader(stream);
+                var serializer = new JsonSerializer { ContractResolver = new GraphContractResolver() };
+                var json = await JObject.LoadAsync(jsonReader);
+                return json.ToObject<Graph?>(serializer);
+            }
+            catch(Exception e)
+            {
+                await _msgbox.ShowMessageAsync($"Error loading graph from {fileName}", e.Message);
+            }
+            return null;
+        }
+
+        private async Task SaveGraphToJsonFile(string fileName)
+        {
+            try
+            {
+                using var file = File.OpenWrite(fileName);
+                using var stream = new StreamWriter(file);
+                using var jsonWriter = new JsonTextWriter(stream);
+                var serializer = new JsonSerializer { ContractResolver = new GraphContractResolver() };
+                var json = JObject.FromObject(Graph, serializer);
+                await json.WriteToAsync(jsonWriter);
+            }
+            catch (Exception e)
+            {
+                await _msgbox.ShowMessageAsync($"Error saving graph to {fileName}", e.Message);
             }
         }
 
