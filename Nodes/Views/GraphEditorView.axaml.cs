@@ -20,6 +20,7 @@ namespace Nodes.Views
 {
     public partial class GraphEditorView : Canvas
     {
+        private const double DefaultArrowLength = 10;
         public static DirectProperty<GraphEditorView, Graph> GraphProperty =
             AvaloniaProperty.RegisterDirect<GraphEditorView, Graph>(nameof(Graph),
                 g => g.Graph, (g,v)=> g.Graph = v);
@@ -158,8 +159,8 @@ namespace Nodes.Views
             var edge = new Edge(fromNode, toNode);
             Graph.AddEdge(edge);
             var edgeControl = MakeEdgeControl(edge);
-            edgeControl.SetValue(EdgeView.FromProperty, CreateFromPointForNode(fromView));
-            edgeControl.SetValue(EdgeView.ToProperty, CreateToPointForNode(toView));
+            edgeControl.SetValue(EdgeView.FromProperty, CreateSourcePointForNode(fromView));
+            edgeControl.SetValue(EdgeView.ToProperty, CreateDestinationPointForNode(toView));
             Children.Add(edgeControl);
             SetupAttachmentPointsTracking(edgeControl, fromView, toView);
             _edgesToViews.Add(edge, edgeControl);
@@ -207,20 +208,25 @@ namespace Nodes.Views
 
         private static void UpdateEdgeAttachmentPoints(EdgeView edgeCtrl, NodeView from, NodeView to)
         {
-            Point fromPoint = CreateFromPointForNode(from);
-            Point toPoint = CreateToPointForNode(to);
+            Point fromPoint = CreateSourcePointForNode(from);
+            Point toPoint = CreateDestinationPointForNode(to);
             edgeCtrl.SetValue(EdgeView.FromProperty, fromPoint);
             edgeCtrl.SetValue(EdgeView.ToProperty, toPoint);
-            edgeCtrl.SetValue(EdgeView.ArrowLengthProperty, 10); // TODO: make this a constant
+            var arrowLength = edgeCtrl.GetValue<double>(EdgeView.ArrowLengthProperty);
+            if (arrowLength <= 0 || arrowLength <= double.Epsilon)
+            {
+                arrowLength = DefaultArrowLength;
+            }
+            edgeCtrl.SetValue(EdgeView.ArrowLengthProperty, arrowLength);
             edgeCtrl.InvalidateVisual();
         }
 
-        private static Point CreateToPointForNode(NodeView to)
+        private static Point CreateDestinationPointForNode(NodeView to)
         {
             return new Point(to.Bounds.Left + to.Bounds.Width / 2, to.Bounds.Top);
         }
 
-        private static Point CreateFromPointForNode(NodeView from)
+        private static Point CreateSourcePointForNode(NodeView from)
         {
             return new Point(from.Bounds.Left + from.Bounds.Width / 2, from.Bounds.Bottom);
         }
@@ -228,9 +234,6 @@ namespace Nodes.Views
         private NodeView MakeNodeControl(Node node)
         {
             var control = new NodeView { DataContext = new NodeViewModel(node) };
-            //control.GetObservable(NodeView.IsSelectedProperty)
-            //    .Where(selected => selected)
-            //    .Subscribe(_ => SelectedNodes.Add(control));
             return control;
         }
 
