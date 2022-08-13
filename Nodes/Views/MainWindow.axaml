@@ -25,8 +25,7 @@
 	<Grid RowDefinitions="40,*">
 		<StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
 			<Button Content="Add Node" Command="{Binding #graphEditor.AddNode}"/>
-			<Button Content="Remove Node" Command="{Binding #graphEditor.RemoveNode}">
-			</Button>
+			<Button Content="Remove Node" Command="{Binding #graphEditor.RemoveNode}" />
 			<Button Content="Connect Nodes" Command="{Binding #graphEditor.ConnectNodes}"/>
 			<Button Content="Disconnect Nodes" Command="{Binding #graphEditor.DisconnectNodes}"/>
 			<Button Content="Open File" Command="{Binding OpenFileCommand}"/>

@@ -20,7 +20,7 @@ namespace Nodes.Utils
             graph.Nodes = new HashSet<Node>(nodesArray.Select(x =>
             {
                 var node = (JObject)x;
-                var id = node.Property("id")?.Value.Value<uint>() ?? throw exception;
+                var id = node.Property("id")?.Value.Value<int>() ?? throw exception;
                 var name = node.Property("name")?.Value.Value<string>() ?? throw exception;
                 var position = Point.Parse(node.Property("position")?.Value.Value<string>() ?? throw exception);
                 return new Node(name!) { Id = id, Position = position };

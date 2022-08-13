@@ -21,9 +21,8 @@ namespace Nodes.Services
 
         public async Task ShowMessageAsync(string title, string message)
         {
-            var window = new MessageBox();
-            window.Title = title;
-            ICommand close = ReactiveCommand.Create(() => window.Close());
+            var window = new MessageBox { Title = title };
+            var close = ReactiveCommand.Create(() => window.Close());
             window.DataContext = new { Message = message, Close = close };
             await window.ShowDialog(_parentWindow);
         }

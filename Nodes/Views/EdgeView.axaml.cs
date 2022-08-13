@@ -1,25 +1,23 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Nodes.Utils;
-using ReactiveUI;
 
 namespace Nodes.Views
 {
     public partial class EdgeView : Canvas
     {
-        public static DirectProperty<EdgeView, Point> FromProperty = AvaloniaProperty.RegisterDirect<EdgeView, Point>(nameof(From),
-            e=>e.From, (e,v) => e.From = v);
+        public static DirectProperty<EdgeView, Point> FromProperty =
+            AvaloniaProperty.RegisterDirect<EdgeView, Point>(nameof(From), e=>e.From, (e,v) => e.From = v);
 
-        public static DirectProperty<EdgeView, Point> ToProperty = AvaloniaProperty.RegisterDirect<EdgeView, Point>(nameof(To),
-            e=>e.To, (e,v) => e.To = v);
+        public static DirectProperty<EdgeView, Point> ToProperty =
+            AvaloniaProperty.RegisterDirect<EdgeView, Point>(nameof(To), e=>e.To, (e,v) => e.To = v);
 
-        public static DirectProperty<EdgeView, double> ArrowLengthProperty = AvaloniaProperty.RegisterDirect<EdgeView, double>(nameof(ArrowLength),
-            a=>a.ArrowLength, (a,v) => a.ArrowLength = v);
+        public static DirectProperty<EdgeView, double> ArrowLengthProperty =
+            AvaloniaProperty.RegisterDirect<EdgeView, double>(nameof(ArrowLength), a=>a.ArrowLength, (a,v) => a.ArrowLength = v);
 
         static EdgeView()
         {
@@ -59,7 +57,6 @@ namespace Nodes.Views
 
         public override void Render(DrawingContext context)
         {
-            //base.Render(context);
             var pen = new Pen(Brushes.Black) { Thickness = 2 };
             var from = GetValue(FromProperty);
             var to = GetValue(ToProperty);

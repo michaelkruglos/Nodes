@@ -48,6 +48,9 @@ namespace Nodes.Models
         public void AddEdge(Edge edge)
         {
             if (edge == null) throw new ArgumentNullException(nameof(edge));
+            if (edge.From == null) throw new ArgumentNullException(nameof(edge.From));
+            if (edge.To == null) throw new ArgumentNullException(nameof(edge.To));
+
             if (!Nodes.Contains(edge.From))
             {
                 AddNode(edge.From);
